@@ -1,38 +1,35 @@
 package chess
 
-import "errors"
+import (
+	"errors"
+	"strings"
+)
 
-// CanKnightAttack checks if two knights on specified positions can attack each other
 func CanKnightAttack(white, black string) (bool, error) {
-	// Do initial validation
-	if len(white) < 2 || len(black) < 2 {
-		return false, errors.New("args too short")
+	// validate entry
+	// square must have 2 characters
+	if len(white) != 2 || len(black) != 2 {
+		return true, errors.New("invalid square")
 	}
 
-	// Check if pieces are on board
-	if white[0]-'a' > 7 || white[1]-'1' > 7 {
-		return false, errors.New("invalid white position")
+	// cannot be on the same
+	if white == black {
+		return true, errors.New("invalid square")
 	}
-	if black[0]-'a' > 7 || black[1]-'1' > 7 {
-		return false, errors.New("invalid black position")
+	// parse rank & file
+	files := "abcdefgh"
+	ranks := "12345678"
+	wf := string(white[0])
+	wr := string(white[1])
+	bf := string(black[0])
+	br := string(black[1])
+	if !strings.Contains(files, wf) ||
+		!strings.Contains(files, bf) ||
+		!strings.Contains(ranks, wr) ||
+		!strings.Contains(ranks, br) {
+		return true, errors.New("invalid square")
 	}
+	// check for colour match
 
-	// Calculate distance between knights in each axis
-	d0 := abs(int(white[0]) - int(black[0]))
-	d1 := abs(int(white[1]) - int(black[1]))
-
-	// If the difference is 1 on one axis and 2 on the other we're happy
-	if (d0 == 1 && d1 == 2) || (d0 == 2 && d1 == 1) {
-		return true, nil
-	} else if d0 == 0 && d1 == 0 {
-		return false, errors.New("you cannot stack them you silly")
-	}
 	return false, nil
-}
-
-func abs(x int) int {
-	if x < 0 {
-		return -x
-	}
-	return x
 }

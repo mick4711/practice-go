@@ -8,8 +8,12 @@ var tests = []struct {
 	attack bool
 	error  bool
 }{
-	{"f1", "g2", false, false},
-	{"d4", "f4", false, false},
+	{"not", "valid", true, true},
+	{"", "", false, true},
+	{"a8", "b9", false, true},
+	{"a0", "b1", false, true},
+	{"g3", "i5", false, true},
+	{"b4", "b4", false, true},
 	{"a8", "b6", true, false},
 	{"b7", "d8", true, false},
 	{"c6", "b8", true, false},
@@ -18,12 +22,8 @@ var tests = []struct {
 	{"f8", "h7", true, false},
 	{"g1", "h3", true, false},
 	{"h4", "g2", true, false},
-	{"b4", "b4", false, true},
-	{"a8", "b9", false, true},
-	{"a0", "b1", false, true},
-	{"g3", "i5", false, true},
-	{"not", "valid", true, true},
-	{"", "", false, true},
+	{"f1", "g2", false, false},
+	{"d4", "f4", false, false},
 }
 
 func TestCanKnightAttack(t *testing.T) {
