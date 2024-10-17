@@ -1,16 +1,19 @@
 package floyd
 
-func Triangle(rowsCount int) [][]int {
-	triangle := make([][]int, 0, rowsCount)
+type row []int
+type triangle []row
+
+func Triangle(rowsCount int) triangle {
+	result := make(triangle, 0, rowsCount)
 	value := 0
 
 	for iRow := 1; iRow <= rowsCount; iRow++ {
-		row := make([]int, 0, iRow)
+		line := make(row, 0, iRow)
 		for col := 1; col <= iRow; col++ {
 			value++
-			row = append(row, value)
+			line = append(line, value)
 		}
-		triangle = append(triangle, row)
+		result = append(result, line)
 	}
-	return triangle
+	return result
 }
