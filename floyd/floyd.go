@@ -1,16 +1,16 @@
 package floyd
 
-import "fmt"
+func Triangle(rowsCount int) [][]int {
+	triangle := make([][]int, 0, rowsCount)
+	value := 0
 
-func Triangle(rowCount int) [][]int {
-	for i := range rowCount {
-		outer := [][]int{}
-		inner := []int{}
-		for j := range i {
-			fmt.Println(i, j)
-			inner = []int{1}
+	for iRow := 1; iRow <= rowsCount; iRow++ {
+		row := make([]int, 0, iRow)
+		for col := 1; col <= iRow; col++ {
+			value++
+			row = append(row, value)
 		}
-		append(outer, inner)
+		triangle = append(triangle, row)
 	}
-	return outer
+	return triangle
 }
