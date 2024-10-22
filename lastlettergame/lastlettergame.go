@@ -6,15 +6,33 @@ import "fmt"
 type wordParam struct {
 	startRune  rune
 	endRune    rune
-	firstCount int
-	lastCount  int
+	startCount int
+	endCount   int
 }
 
 func Sequence(words []string) []string {
+	// make a map of word params with start and end letters and joining word counts
+	wordParams := getWordParams(words)
+	for word, wordParam := range wordParams {
+		fmt.Println(word, wordParam.startCount, wordParam.endCount)
+	}
+
+	// find middle with positive start and end counts
+	for word, wordParam := range wordParams {
+		fmt.Println(word, wordParam.startCount, wordParam.endCount)
+	}
+	// append valid start and end values
+	return []string{"ab", "bc", "cd"}
+}
+
+// make a map of word params with start and end letters and joining word counts
+func getWordParams(words []string) map[string]*wordParam {
+	// initialise maps
 	wordParams := make(map[string]*wordParam, len(words))
-	// iter words check end letter count at start of words
 	startRunes := make(map[rune]int)
 	endRunes := make(map[rune]int)
+
+	// fill map with start and end letters keeping counts
 	for _, word := range words {
 		startRune := rune(word[0])
 		startRunes[startRune]++
@@ -27,23 +45,17 @@ func Sequence(words []string) []string {
 			0,
 		}
 	}
-	for word, wordParam := range wordParams {
+	fmt.Println(startRunes, endRunes)
+
+	// update map with start and end counts
+	for _, wordParam := range wordParams {
 		if count, ok := endRunes[wordParam.startRune]; ok {
-			wordParams[word].lastCount = count
+			wordParam.endCount = count
 		}
 		if count, ok := startRunes[wordParam.endRune]; ok {
-			wordParam.firstCount = count
+			wordParam.startCount = count
 		}
 	}
-	for word, wordParam := range wordParams {
-		fmt.Println(word, *&wordParam.firstCount, *&wordParam.lastCount)
-	}
 
-	fmt.Println(startRunes)
-	fmt.Println(endRunes)
-
-	// and start letter as count of word endings
-	// find middle with positive start and end counts
-	// append valid start and end values
-	return []string{"ab", "bc", "cd"}
+	return wordParams
 }
