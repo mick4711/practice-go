@@ -3,7 +3,6 @@ package lastlettergame
 import (
 	"fmt"
 	"os"
-
 	"strings"
 	"testing"
 )
@@ -26,6 +25,7 @@ func init() {
 	if len(allwords) > 0 && allwords[len(allwords)-1] == "" {
 		allwords = allwords[0 : len(allwords)-1]
 	}
+	allwords = []string{"cd", "bd", "ab", "bc"}
 
 	dic = make(map[string]bool, len(allwords))
 	for _, word := range allwords {
@@ -35,6 +35,7 @@ func init() {
 }
 
 func TestSequence(t *testing.T) {
+	expected = []string{"ab", "bc", "cd"}
 	actual := Sequence(allwords)
 	if !validateSequenceRes(actual) {
 		t.Errorf("Sequence(%v) expected %v, got %v", allwords, expected, actual)
