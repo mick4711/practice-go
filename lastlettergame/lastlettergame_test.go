@@ -26,6 +26,10 @@ func init() {
 		allwords = allwords[0 : len(allwords)-1]
 	}
 	allwords = []string{"cd", "bd", "ab", "bc"}
+	// allwords = []string{
+	// 	"qf", "zp", "mo", "df", "pm",
+	// 	"fz", "dq", "fg", "zd", "fp",
+	// }
 
 	dic = make(map[string]bool, len(allwords))
 	for _, word := range allwords {
@@ -36,6 +40,7 @@ func init() {
 
 func TestSequence(t *testing.T) {
 	expected = []string{"ab", "bc", "cd"}
+	// expected = []string{"df", "fz", "zd", "dq", "qf", "fg"}
 	actual := Sequence(allwords)
 	if !validateSequenceRes(actual) {
 		t.Errorf("Sequence(%v) expected %v, got %v", allwords, expected, actual)
