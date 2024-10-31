@@ -11,22 +11,23 @@ type wordParam struct {
 	children  []string
 }
 
-// var wordParams map[string]*wordParam
+// type wordParams map[string]*wordParam
+var wordParams map[string]*wordParam
 
 func Sequence(words []string) []string {
 	// make a map of word params
-	wordParams := setWordParams(words)
+	setWordParams(words)
 
 	// populate children
-	populateChildren(words, wordParams)
+	populateChildren(words)
 
 	// get words that have no parents
-	rootWords := getRootWords(wordParams)
+	rootWords := getRootWords()
 
 	// for each rootWord get longest sequence
 	var sequence []string
 	for _, rootWord := range rootWords {
-		sequence = getLongestSeq(rootWord, wordParams)
+		sequence = getLongestSeq(rootWord)
 	}
 
 	// debug print
@@ -39,9 +40,9 @@ func Sequence(words []string) []string {
 	// return []string{"df", "fz", "zd", "dq", "qf", "fg"}
 }
 
-func setWordParams(words []string) map[string]*wordParam {
+func setWordParams(words []string) {
 	// initialise maps
-	wordParams := make(map[string]*wordParam, len(words))
+	wordParams = make(map[string]*wordParam, len(words))
 
 	// fill map with start and end letters keeping counts
 	for _, word := range words {
@@ -55,27 +56,26 @@ func setWordParams(words []string) map[string]*wordParam {
 			children:  []string{},
 		}
 	}
-
-	return wordParams
 }
 
-func populateChildren(words []string, wordParams map[string]*wordParam) {
+func populateChildren(words []string) {
 	nextWord := words[0]
 	for finished := false; !finished; {
-		children := getChildren(*wordParams[nextWord], wordParams)
+		children := getChildren(*wordParams[nextWord])
 		wordParams[nextWord].children = children
 		wordParams[nextWord].done = true
 
-		nextWord, finished = getNextWord(wordParams)
+		nextWord, finished = getNextWord()
 	}
 }
 
 // get words that can be tacked onto passed in word
-func getChildren(wp wordParam, wordParams map[string]*wordParam) []string {
+func getChildren(wp wordParam) []string {
 	if wp.done {
 		return wp.children
 	}
 
+	wp.done = true // TODO this is copy not member of map
 	children := []string{}
 	for word, wordParam := range wordParams {
 		if wp.endRune == wordParam.startRune {
@@ -84,15 +84,16 @@ func getChildren(wp wordParam, wordParams map[string]*wordParam) []string {
 		}
 	}
 
+	// TODO infinite loop here cd, dc
 	for _, word := range children {
-		getChildren(*wordParams[word], wordParams)
+		getChildren(*wordParams[word])
 	}
 
 	return children
 }
 
 // get next word that is not done
-func getNextWord(wordParams map[string]*wordParam) (string, bool) {
+func getNextWord() (string, bool) {
 	done := true
 	for word, wordParam := range wordParams {
 		if wordParam.done == false {
@@ -102,7 +103,7 @@ func getNextWord(wordParams map[string]*wordParam) (string, bool) {
 	return "", done
 }
 
-func getRootWords(wordParams map[string]*wordParam) []string {
+func getRootWords() []string {
 	rootWords := []string{}
 	for word, wordParam := range wordParams {
 		if wordParam.isRoot {
@@ -113,12 +114,29 @@ func getRootWords(wordParams map[string]*wordParam) []string {
 	return rootWords
 }
 
-func getLongestSeq(word string, wordParams map[string]*wordParam) []string {
-	seq := []string{}
+func getLongestSeq(word string) []string {
+	seqOfSeqs := [][]string{}
 	for _, child := range wordParams[word].children {
-		seq = append(seq, child)
+		seq := []string{word}
+		seq2 := getLongestSeq(child)
+		if len(seq2) > 0 {
+			seq = append(seq, seq2...)
+		} else {
+			seq = append(seq, child)
+		}
+		seqOfSeqs = append(seqOfSeqs, seq)
 	}
 
-	// return seq
-	return []string{"ab", "bc", "cd"}
+	maxLen := 0
+	longest := []string{}
+	for _, seq := range seqOfSeqs {
+		if len(seq) > maxLen {
+			longest = seq
+			maxLen = len(seq)
+		}
+	}
+	fmt.Println(longest)
+	return longest
+	// return []string{"df", "fz", "zd", "dq", "qf", "fg"}
+	// return []string{"ab", "bc", "cd"}
 }

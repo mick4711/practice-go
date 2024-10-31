@@ -25,7 +25,8 @@ func init() {
 	if len(allwords) > 0 && allwords[len(allwords)-1] == "" {
 		allwords = allwords[0 : len(allwords)-1]
 	}
-	allwords = []string{"cd", "bd", "ab", "bc"}
+	allwords = []string{"cd", "dc", "bd", "ab", "bc", "ba"}
+	// allwords = []string{"cd", "bd", "ab", "bc"}
 	// allwords = []string{
 	// 	"qf", "zp", "mo", "df", "pm",
 	// 	"fz", "dq", "fg", "zd", "fp",
