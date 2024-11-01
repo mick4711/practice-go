@@ -4,6 +4,7 @@ import "fmt"
 
 // make a struct with word parameters
 type wordParam struct {
+	key       string
 	startRune rune
 	endRune   rune
 	isRoot    bool
@@ -19,8 +20,10 @@ func Sequence(words []string) []string {
 	setWordParams(words)
 
 	// populate children
+	// TODO bc no children missing cd
 	populateChildren(words)
 
+	// TODO no root words set
 	// get words that have no parents
 	rootWords := getRootWords()
 
@@ -49,6 +52,7 @@ func setWordParams(words []string) {
 		startRune := rune(word[0])
 		endRune := rune(word[len(word)-1])
 		wordParams[word] = &wordParam{
+			key:       word,
 			startRune: startRune,
 			endRune:   endRune,
 			isRoot:    true,
@@ -75,7 +79,7 @@ func getChildren(wp wordParam) []string {
 		return wp.children
 	}
 
-	wp.done = true // TODO this is copy not member of map
+	wordParams[wp.key].done = true
 	children := []string{}
 	for word, wordParam := range wordParams {
 		if wp.endRune == wordParam.startRune {
