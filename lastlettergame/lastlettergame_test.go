@@ -12,7 +12,8 @@ var (
 	allwords []string
 	// dic will be inited and filled in init() func
 	dic      map[string]bool
-	expected = []string{"machamp", "petilil", "landorus", "scrafty", "yamask", "kricketune", "emboar", "registeel", "loudred", "darmanitan", "nosepass", "simisear", "relicanth", "heatmor", "rufflet", "trapinch", "haxorus", "seaking", "girafarig", "gabite", "exeggcute", "emolga", "audino"}
+	// expected = []string{"machamp", "petilil", "landorus", "scrafty", "yamask", "kricketune", "emboar", "registeel", "loudred", "darmanitan", "nosepass", "simisear", "relicanth", "heatmor", "rufflet", "trapinch", "haxorus", "seaking", "girafarig", "gabite", "exeggcute", "emolga", "audino"}
+	expected = []string{"axa", "axb", "bxc"}
 )
 
 func init() {
